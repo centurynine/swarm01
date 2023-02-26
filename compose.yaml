@@ -1,5 +1,5 @@
 services:
-  web:
+  web-php:
     build:
       context: app
       target: builder
