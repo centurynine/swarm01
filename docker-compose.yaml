@@ -20,7 +20,7 @@ services:
         - traefik.http.routers.spcn05-php-https.rule=Host("spcn05-php.xops.ipv9.me")
         - traefik.http.routers.spcn05-php-https.tls.certresolver=default
         - traefik.http.services.spcn05-php.loadbalancer.server.port=80
-         
+
 volumes:
   app:
 
