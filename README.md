@@ -1,5 +1,6 @@
 # Ref
 - https://github.com/docker/awesome-compose/tree/master/django
+- https://github.com/pitimon/dockerswarm-inhoure
 
 # Wakatime
 - https://wakatime.com/@spcn05/projects/qxrsnbwxam
@@ -38,7 +39,7 @@ ln -s /etc/machine-id /var/lib/dbus/machine-id
 ```
 docker swarm init
 ```
-    - โดยจะได้คำสั่งและคีย์มาเพื่อนำไปสร้าง worker
+ - โดยจะได้คำสั่งและคีย์มาเพื่อนำไปสร้าง worker
 
 2. นำคำสั่งที่ได้มาไปรันบนเครื่อง worker
 
@@ -78,3 +79,86 @@ docker stack deploy -c portainer-agent-stack.yml portainer
     ```
 
 3. ตรวจสอบการใช้งานโดยเข้าไปที่ https://traefik.cpedemo.local/
+
+# Swarmpit
+1. ทำการติดตั้ง swarmpit เพื่อใช้ในการ dashboard ดูรายละเอียดของ node
+
+    ```
+    export DOMAIN=swarmpit.cpedemo.local
+
+    กำหนดค่า lable ให้กับ db-data
+    export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
+    docker node update --label-add swarmpit.db-data=true $NODE_ID
+
+    กำหนดค่า lable ให้กับ influx-data
+    export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
+    docker node update --label-add swarmpit.influx-data=true $NODE_ID
+
+    docker stack deploy -c swarmpit.yml swarmpit
+    ```
+
+2. ตรวจสอบการใช้งานโดยเข้าไปที่ http://swarmpit.cpedemo.local/
+
+# Docker hub images
+1. ทำการล็อกอินบัญชี docker ที่ node
+    ```
+    docker login
+    ```
+
+2. ตรวจสอบชื่อ images ทั้งหมดที่มีเพื่อใช้ในการ push ลง docker hub
+    ```
+    docker images
+    ```
+
+3. สร้าง image ใหม่โดยใช้ image ตัวเดิม
+    ```
+    docker tag swarm01-web-php:latest centurynine/swarm01-web-php:0311
+    ```
+
+4. push image เข้าสู่ docker hub
+    ```
+    docker push centurynine/swarm01-web-php:0311
+    ```
+
+# Portainer rev-proxy deploy stack
+1. เข้าไปที่หน้าเว็บ https://portainer.ipv9.me
+
+2. ทำการ Add stack โดยใช้ image ที่ได้ push ลงไปยัง docker
+    ```
+    version: '3.7'
+    services:
+    web-php:
+        image: centurynine/swarm01-web-php:0311
+        networks:
+        - webproxy
+        logging:
+        driver: json-file
+        options:
+            "max-size": "10m"
+            "max-file": "5"
+        volumes:
+        - app:/var/www/html/
+        deploy: 
+        replicas: 1 
+        labels:
+            - traefik.docker.network=webproxy
+            - traefik.enable=true
+            - traefik.http.routers.${APPNAME}-https.entrypoints=websecure
+            - traefik.http.routers.${APPNAME}-https.rule=Host("${APPNAME}.xops.ipv9.me")
+            - traefik.http.routers.${APPNAME}-https.tls.certresolver=default
+            - traefik.http.services.${APPNAME}.loadbalancer.server.port=80
+            
+    volumes:
+    app:
+
+    networks:
+    webproxy:
+        external: true
+    ```
+
+3. กำหนด environment variables 
+    - APPNAME = spcn05-php
+
+4. ทำการ deploy stack
+
+5. ตรวจสอบว่าทำการ deply ได้ไหมที่ลิ้งค์ https://spcn05-php.xops.ipv9.me/
