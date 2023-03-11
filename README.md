@@ -38,7 +38,7 @@ ln -s /etc/machine-id /var/lib/dbus/machine-id
 ```
 docker swarm init
 ```
-    - โดยจะได้คำสั่งและคีย์มาเพื่อนำไปสร้าง worker
+ - โดยจะได้คำสั่งและคีย์มาเพื่อนำไปสร้าง worker
 
 2. นำคำสั่งที่ได้มาไปรันบนเครื่อง worker
 
