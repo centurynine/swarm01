@@ -164,6 +164,7 @@ docker stack deploy -c portainer-agent-stack.yml portainer
 ![image](https://user-images.githubusercontent.com/109062980/224478595-1e4b1cd0-398f-481f-8e0e-aee1a9229520.png)
 
 4. ทำการ deploy stack
+![image](https://user-images.githubusercontent.com/109062980/224479258-289d2b2d-4c6b-4748-b3c9-95a170ad2a06.png)
 
 5. ตรวจสอบว่าทำการ deply ได้ไหมที่ลิ้งค์ https://spcn05-php.xops.ipv9.me/
 ![image](https://user-images.githubusercontent.com/109062980/224477886-33e36cf7-fe4a-44ba-8bcf-e6ed7f0920ae.png)
