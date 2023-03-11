@@ -2,6 +2,10 @@
 
 FROM --platform=$BUILDPLATFORM php:8.0.9-apache as builder
 
+WORKDIR /var/www/html/
+COPY . /var/www/html/
+EXPOSE 80
+
 CMD ["apache2-foreground"]
 
 FROM builder as dev-envs
