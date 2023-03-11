@@ -110,7 +110,9 @@ docker stack deploy -c portainer-agent-stack.yml portainer
     docker images
     ```
 
-3. สร้าง image ใหม่โดยใช้ image ตัวเดิม
+3. สร้าง image ใหม่เพื่อเตรียม push ลง docker โดยใช้ image ตัวเดิม
+![สกรีนช็อต 2023-03-11 171359](https://user-images.githubusercontent.com/109062980/224478721-9d59044c-b1f9-4980-8792-5335456bc3b4.png)
+
     ```
     docker tag swarm01-web-php:latest centurynine/swarm01-web-php:0311
     ```
@@ -119,6 +121,7 @@ docker stack deploy -c portainer-agent-stack.yml portainer
     ```
     docker push centurynine/swarm01-web-php:0311
     ```
+![image](https://user-images.githubusercontent.com/109062980/224478849-664693e1-023c-47e4-abe9-efe025fc28c4.png)
 
 # Portainer rev-proxy deploy stack
 1. เข้าไปที่หน้าเว็บ https://portainer.ipv9.me
@@ -158,6 +161,7 @@ docker stack deploy -c portainer-agent-stack.yml portainer
 
 3. กำหนด environment variables 
     - APPNAME = spcn05-php
+![image](https://user-images.githubusercontent.com/109062980/224478595-1e4b1cd0-398f-481f-8e0e-aee1a9229520.png)
 
 4. ทำการ deploy stack
 
